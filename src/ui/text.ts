@@ -36,7 +36,7 @@ export enum TextStyle {
   MOVE_PP_EMPTY
 }
 
-export function addTextObject(scene: Phaser.Scene, x: number, y: number, content: string, style: TextStyle, extraStyleOptions?: Phaser.Types.GameObjects.Text.TextStyle): Phaser.GameObjects.Text {
+export function addTextObject(scene: Phaser.Scene, x: number, y: number, content: string, style: TextStyle, extraStyleOptions?: Phaser.Types.GameObjects.Text.TextStyle, interactable: boolean = false): Phaser.GameObjects.Text {
   const [ scale, styleOptions, shadowColor, shadowXpos, shadowYpos ] = getTextStyleOptions(style, (scene as BattleScene).uiTheme, extraStyleOptions);
 
   const ret = scene.add.text(x, y, content, styleOptions);
@@ -44,6 +44,9 @@ export function addTextObject(scene: Phaser.Scene, x: number, y: number, content
   ret.setShadow(shadowXpos, shadowYpos, shadowColor);
   if (!(styleOptions as Phaser.Types.GameObjects.Text.TextStyle).lineSpacing) {
     ret.setLineSpacing(5);
+  }
+  if (interactable) {
+    ret.setInteractive();
   }
 
   return ret;

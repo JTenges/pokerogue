@@ -31,6 +31,7 @@ export class UiInputs {
   }
 
   detectInputMethod(evt): void {
+    console.log("event", evt);
     if (evt.controller_type === "keyboard") {
       //if the touch property is present and defined, then this is a simulated keyboard event from the touch screen
       if (evt.hasOwnProperty("isTouch") && evt.isTouch) {
@@ -40,6 +41,8 @@ export class UiInputs {
       }
     } else if (evt.controller_type === "gamepad") {
       this.scene.inputMethod = "gamepad";
+    } else if (evt.controller_type === "mouse" || evt.type.startsWith("mouse")) {
+      this.scene.inputMethod = "mouse";
     }
   }
 
@@ -61,6 +64,47 @@ export class UiInputs {
       }
       actions[event.button]();
     }, this);
+
+    // Listen for mouse down events
+    this.scene.input.on("pointerdown", (pointer) => {
+      const evt = { controller_type: "mouse", button: pointer.button, type: "pointerdown" };
+      this.detectInputMethod(evt);
+      // Define actions for mouse down
+    }, this);
+
+    // Listen for mouse up events
+    this.scene.input.on("pointerup", (pointer) => {
+      const evt = { controller_type: "mouse", button: pointer.button, type: "pointerup" };
+      // Define actions for mouse up
+      this.detectInputMethod(evt);
+    }, this);
+
+    this.scene.input.on("gameobjectdown", (pointer, gameObject) => {
+      console.log(`game object clicked ${typeof gameObject} ${gameObject.text}`);
+      if (gameObject instanceof Phaser.GameObjects.Text) {
+        console.log(`text object clicked ${gameObject.text}`);
+      }
+
+    }, this);
+
+    this.scene.input.on("gameobjectover", (pointer, gameObject) => {
+      console.log(`game object over ${typeof gameObject} ${gameObject.text}`);
+      if (gameObject instanceof Phaser.GameObjects.Text) {
+        console.log(`text object over ${gameObject.text}`);
+      }
+    }, this);
+
+    this.scene.input.on("gameobjectout", (pointer, gameObject) => {
+      console.log(`game object out ${typeof gameObject} ${gameObject.text}`);
+      if (gameObject instanceof Phaser.GameObjects.Text) {
+        console.log(`text object out ${gameObject.text}`);
+      }
+    }, this);
+
+    // Optionally, listen for mouse move events to highlight menu options
+    // this.scene.input.on('pointermove', (pointer) => {
+    //   // Define actions for mouse move
+    // }, this);
   }
 
   doVibration(inputSuccess: boolean, vibrationLength: number): void {

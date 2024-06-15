@@ -181,6 +181,7 @@ export class TitlePhase extends Phase {
   }
 
   showOptions(): void {
+    console.log("calling showOptions");
     const options: OptionSelectItem[] = [];
     if (loggedInUser.lastSessionSlot > -1) {
       options.push({

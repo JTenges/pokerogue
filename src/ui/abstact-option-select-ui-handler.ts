@@ -81,7 +81,7 @@ export default abstract class AbstractOptionSelectUiHandler extends UiHandler {
       this.optionSelectIcons.splice(0, this.optionSelectIcons.length);
     }
 
-    this.optionSelectText = addTextObject(this.scene, 0, 0, options.map(o => o.item ? `    ${o.label}` : o.label).join("\n"), TextStyle.WINDOW, { maxLines: options.length });
+    this.optionSelectText = addTextObject(this.scene, 0, 0, options.map(o => o.item ? `    ${o.label}` : `${o.label} test`).join("\n"), TextStyle.WINDOW, { maxLines: options.length }, true);
     this.optionSelectText.setLineSpacing(12);
     this.optionSelectContainer.add(this.optionSelectText);
     this.optionSelectContainer.setPosition((this.scene.game.canvas.width / 6) - 1 - (this.config?.xOffset || 0), -48 + (this.config?.yOffset || 0));
@@ -97,7 +97,9 @@ export default abstract class AbstractOptionSelectUiHandler extends UiHandler {
     this.optionSelectText.setPositionRelative(this.optionSelectBg, 16, 9);
 
     options.forEach((option: OptionSelectItem, i: integer) => {
+      console.log("in options loop");
       if (option.item) {
+        console.log("item option");
         const itemIcon = this.scene.add.sprite(0, 0, "items", option.item);
         itemIcon.setScale(0.5);
         this.optionSelectIcons.push(itemIcon);
@@ -126,6 +128,8 @@ export default abstract class AbstractOptionSelectUiHandler extends UiHandler {
     if (!args.length || !args[0].hasOwnProperty("options") || !args[0].options.length) {
       return false;
     }
+
+    console.log("calling show with args", args);
 
     super.show(args);
 
